@@ -511,6 +511,32 @@
       font-size: 0.9rem;
     }
 
+    /* Quick date buttons */
+    .quick-dates {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .qd-btn {
+      padding: 6px 14px;
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .qd-btn:hover { border-color: var(--text-dim); color: var(--text); }
+    .qd-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
     .hidden { display: none !important; }
 
     @media (max-width: 600px) {
@@ -561,8 +587,15 @@
     <div id="fixed-date-section" style="margin-bottom:16px">
       <div class="field">
         <label>Avresedag</label>
-        <div class="date-row">
-          <input type="date" id="dep-date" onchange="updateReturnDate()" style="max-width:180px">
+        <div class="quick-dates" id="quick-dates">
+          <button class="qd-btn" onclick="quickDate('today')">Idag</button>
+          <button class="qd-btn" onclick="quickDate('tomorrow')">Imorgon</button>
+          <button class="qd-btn" onclick="quickDate('thisWeekend')">Denna helg</button>
+          <button class="qd-btn active" onclick="quickDate('nextWeekend')">Nästa helg</button>
+          <button class="qd-btn" onclick="quickDate('nextWeek')">Nästa vecka</button>
+        </div>
+        <div class="date-row" style="margin-top:8px">
+          <input type="date" id="dep-date" onchange="updateReturnDate();clearQuickDate()" style="max-width:180px">
           <div class="date-info" id="trip-summary">
             <span id="trip-dep-label">—</span>
             <span class="arrow">→</span>
@@ -625,13 +658,24 @@
 
 <script>
 const AIRPORTS = [
-  { code: 'GOT', name: 'Göteborg', default: true },
-  { code: 'CPH', name: 'Köpenhamn', default: true },
-  { code: 'MMX', name: 'Malmö', default: true },
+  // Nära Göteborg (default på)
+  { code: 'GOT', name: 'Göteborg Landvetter', default: true },
+  { code: 'CPH', name: 'Köpenhamn Kastrup', default: true },
+  { code: 'MMX', name: 'Malmö Sturup', default: true },
   { code: 'HAD', name: 'Halmstad', default: false },
-  { code: 'ARN', name: 'Stockholm', default: false },
-  { code: 'NYO', name: 'Skavsta', default: false },
+  // Stockholm-området
+  { code: 'ARN', name: 'Stockholm Arlanda', default: false },
+  { code: 'NYO', name: 'Stockholm Skavsta', default: false },
+  { code: 'VST', name: 'Stockholm Västerås', default: false },
+  // Mellan Stockholm & Göteborg
+  { code: 'NRK', name: 'Norrköping', default: false },
+  { code: 'LPI', name: 'Linköping', default: false },
+  { code: 'JKG', name: 'Jönköping', default: false },
+  { code: 'KSD', name: 'Karlstad', default: false },
+  // Småland & Blekinge
   { code: 'VXO', name: 'Växjö', default: false },
+  { code: 'KLR', name: 'Kalmar', default: false },
+  { code: 'RNB', name: 'Ronneby', default: false },
 ];
 
 const DESTINATIONS = [
@@ -755,6 +799,54 @@ function shiftDate(days) {
   d.setDate(d.getDate() + days);
   input.value = fmt(d);
   updateReturnDate();
+  clearQuickDate();
+}
+
+function quickDate(preset) {
+  var today = new Date();
+  var day = today.getDay();
+  var dep;
+
+  switch (preset) {
+    case 'today':
+      dep = today;
+      break;
+    case 'tomorrow':
+      dep = new Date(today);
+      dep.setDate(today.getDate() + 1);
+      break;
+    case 'thisWeekend':
+      // This coming Friday (or today if it's Fri/Sat)
+      if (day === 5) dep = today;
+      else if (day === 6) dep = today;
+      else {
+        dep = new Date(today);
+        dep.setDate(today.getDate() + ((5 - day + 7) % 7));
+      }
+      break;
+    case 'nextWeekend':
+      dep = new Date(today);
+      var daysToFri = (5 - day + 7) % 7 || 7;
+      if (day < 5) daysToFri += 7; // Skip to NEXT week's Friday
+      if (day === 5 || day === 6) daysToFri = (5 - day + 7) % 7 + 7;
+      dep.setDate(today.getDate() + daysToFri);
+      break;
+    case 'nextWeek':
+      dep = new Date(today);
+      dep.setDate(today.getDate() + ((1 - day + 7) % 7 || 7)); // Next Monday
+      break;
+  }
+
+  document.getElementById('dep-date').value = fmt(dep);
+  updateReturnDate();
+
+  // Highlight active button
+  document.querySelectorAll('.qd-btn').forEach(function(b) { b.classList.remove('active'); });
+  event.target.classList.add('active');
+}
+
+function clearQuickDate() {
+  document.querySelectorAll('.qd-btn').forEach(function(b) { b.classList.remove('active'); });
 }
 
 function fmt(d) { return d.toISOString().split('T')[0]; }
