@@ -35,7 +35,6 @@
       overflow-x: hidden;
     }
 
-    /* --- Background atmosphere --- */
     body::before {
       content: '';
       position: fixed;
@@ -88,44 +87,49 @@
       font-size: 0.95rem;
     }
 
-    /* --- Tabs --- */
-    .tabs {
+    /* --- Duration tabs --- */
+    .dur-tabs {
       display: flex;
       gap: 4px;
       background: var(--surface);
       border-radius: 14px;
       padding: 4px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       border: 1px solid var(--card-border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
-    .tab {
+    .dur-tab {
       flex: 1;
-      padding: 12px 16px;
+      min-width: 0;
+      padding: 11px 8px;
       text-align: center;
       border-radius: 10px;
       cursor: pointer;
       font-family: 'Sora', sans-serif;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
       transition: all 0.3s ease;
       border: none;
       background: none;
+      white-space: nowrap;
     }
-    .tab.active {
+    .dur-tab.active {
       background: var(--card);
       color: var(--accent);
       box-shadow: 0 2px 12px var(--accent-glow);
     }
-    .tab:hover:not(.active) { color: var(--text); }
+    .dur-tab:hover:not(.active) { color: var(--text); }
+    .dur-tab .emoji { display: block; font-size: 1.2rem; margin-bottom: 3px; }
 
-    /* --- Search form --- */
+    /* --- Search panel --- */
     .search-panel {
       background: var(--card);
       border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 24px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .form-row {
       display: grid;
@@ -133,7 +137,6 @@
       margin-bottom: 16px;
     }
     .form-row.two-col { grid-template-columns: 1fr 1fr; }
-    .form-row.three-col { grid-template-columns: 1fr 1fr 1fr; }
 
     .field label {
       display: block;
@@ -166,11 +169,69 @@
     .field select { cursor: pointer; }
     .field select option { background: var(--bg); color: var(--text); }
 
+    /* Date display for fixed durations */
+    .date-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .date-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      color: var(--text);
+      flex: 1;
+    }
+    .date-info .arrow { color: var(--accent); font-weight: 600; }
+    .date-nav {
+      display: flex;
+      gap: 6px;
+      margin-left: auto;
+    }
+    .date-nav button {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .date-nav button:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Flex date row */
+    .flex-dates {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      font-family: 'Sora', sans-serif;
+    }
+
     /* Airport checkboxes */
     .airport-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-bottom: 16px;
     }
     .airport-chip {
       display: flex;
@@ -189,7 +250,6 @@
       border-color: var(--accent);
       background: var(--accent-glow);
     }
-    .airport-chip input { display: none; }
     .airport-chip .code {
       font-family: 'Sora', sans-serif;
       font-weight: 700;
@@ -201,12 +261,12 @@
       font-size: 0.75rem;
     }
 
-    /* Destination checkboxes for explore mode */
+    /* Destination chips */
+    .dest-section { margin-bottom: 16px; }
     .dest-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 8px;
     }
     .dest-chip {
       padding: 6px 12px;
@@ -224,6 +284,20 @@
       background: var(--orange-glow);
       color: var(--orange);
     }
+    .dest-select-all {
+      padding: 6px 12px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-family: 'Sora', sans-serif;
+      transition: all 0.2s;
+    }
+    .dest-select-all:hover { opacity: 0.8; }
 
     /* Search button */
     .search-btn {
@@ -238,7 +312,6 @@
       font-size: 0.95rem;
       cursor: pointer;
       transition: all 0.3s;
-      margin-top: 8px;
       letter-spacing: 0.02em;
     }
     .search-btn:hover {
@@ -250,7 +323,7 @@
       cursor: not-allowed;
       transform: none;
     }
-    .search-btn .spinner {
+    .spinner {
       display: inline-block;
       width: 16px;
       height: 16px;
@@ -263,7 +336,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* --- Toggle --- */
+    /* --- Toggle row --- */
     .toggle-row {
       display: flex;
       align-items: center;
@@ -274,10 +347,7 @@
       padding: 14px 20px;
       margin-bottom: 20px;
     }
-    .toggle-row span {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
+    .toggle-row span { font-size: 0.9rem; color: var(--text-muted); }
     .toggle {
       position: relative;
       width: 48px;
@@ -317,10 +387,7 @@
       font-size: 1.1rem;
       font-weight: 700;
     }
-    .results-count {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
+    .results-count { font-size: 0.82rem; color: var(--text-muted); }
     .api-note {
       font-size: 0.75rem;
       color: var(--text-dim);
@@ -329,7 +396,6 @@
       margin-bottom: 16px;
     }
 
-    /* Flight card */
     .flight-card {
       background: var(--card);
       border: 1px solid var(--card-border);
@@ -364,10 +430,6 @@
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .flight-card:nth-child(2) { animation-delay: 0.05s; }
-    .flight-card:nth-child(3) { animation-delay: 0.1s; }
-    .flight-card:nth-child(4) { animation-delay: 0.15s; }
-    .flight-card:nth-child(5) { animation-delay: 0.2s; }
 
     .card-top {
       display: flex;
@@ -391,11 +453,7 @@
       font-weight: 600;
       color: var(--accent);
     }
-
-    .card-price {
-      text-align: right;
-      flex-shrink: 0;
-    }
+    .card-price { text-align: right; flex-shrink: 0; }
     .price-flight {
       font-family: 'Sora', sans-serif;
       font-size: 1.3rem;
@@ -407,10 +465,7 @@
       color: var(--text-muted);
       margin-top: 2px;
     }
-    .price-total b {
-      color: var(--text);
-      font-weight: 600;
-    }
+    .price-total b { color: var(--text); font-weight: 600; }
 
     .card-details {
       display: flex;
@@ -420,19 +475,12 @@
       border-top: 1px solid var(--card-border);
       flex-wrap: wrap;
     }
-    .detail {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-    .detail b {
-      color: var(--text);
-      font-weight: 500;
-    }
+    .detail { font-size: 0.78rem; color: var(--text-muted); }
+    .detail b { color: var(--text); font-weight: 500; }
     .stops-0 { color: var(--green); }
     .stops-1 { color: var(--orange); }
     .stops-2 { color: var(--red); }
 
-    /* Loading */
     .loading-state {
       text-align: center;
       padding: 60px 20px;
@@ -447,16 +495,12 @@
       animation: spin 0.8s linear infinite;
       margin: 0 auto 16px;
     }
-
-    /* Empty state */
     .empty-state {
       text-align: center;
       padding: 60px 20px;
       color: var(--text-muted);
     }
     .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
-
-    /* Error */
     .error-state {
       text-align: center;
       padding: 30px;
@@ -467,17 +511,18 @@
       font-size: 0.9rem;
     }
 
-    /* Section hidden */
     .hidden { display: none !important; }
 
-    /* Responsive */
     @media (max-width: 600px) {
-      .form-row.two-col,
-      .form-row.three-col { grid-template-columns: 1fr; }
+      .form-row.two-col { grid-template-columns: 1fr; }
+      .flex-dates { grid-template-columns: 1fr; }
+      .date-row { flex-direction: column; }
       .card-top { flex-direction: column; }
       .card-price { text-align: left; }
       .card-details { gap: 10px; }
       .container { padding: 16px 12px 60px; }
+      .dur-tab { padding: 10px 6px; font-size: 0.72rem; }
+      .dur-tab .emoji { font-size: 1rem; }
     }
   </style>
 </head>
@@ -485,86 +530,82 @@
 
 <div class="container">
 
-  <!-- Header -->
   <div class="header">
     <h1>✈️ Weekend Finder</h1>
     <p>Hitta billigaste helgresorna från alla flygplatser nära dig</p>
   </div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab active" data-tab="compare" onclick="switchTab('compare')">
-      🔍 Jämför flygplatser
+  <!-- Duration tabs -->
+  <div class="dur-tabs">
+    <button class="dur-tab active" data-days="2" onclick="selectDuration(2)">
+      <span class="emoji">⚡</span> 2 dagar
     </button>
-    <button class="tab" data-tab="explore" onclick="switchTab('explore')">
-      🌍 Utforska helgresor
+    <button class="dur-tab" data-days="3" onclick="selectDuration(3)">
+      <span class="emoji">🌴</span> 3 dagar
+    </button>
+    <button class="dur-tab" data-days="5" onclick="selectDuration(5)">
+      <span class="emoji">🧳</span> 5 dagar
+    </button>
+    <button class="dur-tab" data-days="7" onclick="selectDuration(7)">
+      <span class="emoji">🏖️</span> 7 dagar
+    </button>
+    <button class="dur-tab" data-days="0" onclick="selectDuration(0)">
+      <span class="emoji">📅</span> Flex
     </button>
   </div>
 
-  <!-- SEARCH: Compare mode -->
-  <div class="search-panel" id="panel-compare">
-    <div class="form-row two-col">
+  <!-- Search panel -->
+  <div class="search-panel">
+
+    <!-- Fixed duration date -->
+    <div id="fixed-date-section" style="margin-bottom:16px">
       <div class="field">
-        <label>Destination</label>
-        <select id="compare-dest">
-          <option value="">Välj stad...</option>
-        </select>
+        <label>Avresedag</label>
+        <div class="date-row">
+          <input type="date" id="dep-date" onchange="updateReturnDate()" style="max-width:180px">
+          <div class="date-info" id="trip-summary">
+            <span id="trip-dep-label">—</span>
+            <span class="arrow">→</span>
+            <span id="trip-ret-label">—</span>
+            <span style="color:var(--text-dim);font-size:0.8rem;margin-left:4px" id="trip-nights"></span>
+            <div class="date-nav">
+              <button onclick="shiftDate(-7)" title="Förra veckan">‹</button>
+              <button onclick="shiftDate(7)" title="Nästa vecka">›</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="field" style="display:flex;gap:8px;">
-        <div style="flex:1">
+    </div>
+
+    <!-- Flex dates -->
+    <div id="flex-date-section" class="hidden" style="margin-bottom:16px">
+      <div class="flex-dates">
+        <div class="field">
           <label>Avresa</label>
-          <input type="date" id="compare-dep">
+          <input type="date" id="flex-dep">
         </div>
-        <div style="flex:1">
+        <div class="field">
           <label>Hemresa</label>
-          <input type="date" id="compare-ret">
+          <input type="date" id="flex-ret">
         </div>
       </div>
     </div>
-    <div class="field" style="margin-bottom:16px">
-      <label>Sök från dessa flygplatser</label>
-      <div class="airport-grid" id="compare-airports"></div>
+
+    <!-- Airports -->
+    <div style="margin-bottom:16px">
+      <div class="section-label">Sök från dessa flygplatser</div>
+      <div class="airport-grid" id="airport-grid"></div>
     </div>
-    <button class="search-btn" id="btn-compare" onclick="doCompare()">
+
+    <!-- Destinations -->
+    <div class="dest-section">
+      <div class="section-label">Destinationer</div>
+      <button class="dest-select-all" onclick="toggleAllDests()">Välj alla / Ingen</button>
+      <div class="dest-grid" id="dest-grid"></div>
+    </div>
+
+    <button class="search-btn" id="search-btn" onclick="doSearch()">
       Sök flyg
-    </button>
-  </div>
-
-  <!-- SEARCH: Explore mode -->
-  <div class="search-panel hidden" id="panel-explore">
-    <div class="form-row two-col">
-      <div class="field">
-        <label>Avgår från</label>
-        <select id="explore-origin">
-          <option value="GOT">GOT — Göteborg</option>
-          <option value="CPH">CPH — Köpenhamn</option>
-          <option value="MMX">MMX — Malmö</option>
-          <option value="HAD">HAD — Halmstad</option>
-          <option value="ARN">ARN — Stockholm</option>
-          <option value="NYO">NYO — Skavsta</option>
-          <option value="VXO">VXO — Växjö</option>
-        </select>
-      </div>
-      <div class="field" style="display:flex;gap:8px;">
-        <div style="flex:1">
-          <label>Avresa</label>
-          <input type="date" id="explore-dep">
-        </div>
-        <div style="flex:1">
-          <label>Hemresa</label>
-          <input type="date" id="explore-ret">
-        </div>
-      </div>
-    </div>
-    <div class="field" style="margin-bottom:16px">
-      <label>Destinationer att söka <span style="color:var(--text-dim)">(varje stad = 1 API-sökning)</span></label>
-      <div style="margin-bottom:6px">
-        <button class="dest-chip" style="background:var(--accent-glow);color:var(--accent);border-color:var(--accent)" onclick="toggleAllDests()">Välj alla / Ingen</button>
-      </div>
-      <div class="dest-grid" id="explore-dests"></div>
-    </div>
-    <button class="search-btn" id="btn-explore" onclick="doExplore()">
-      Utforska destinationer
     </button>
   </div>
 
@@ -578,13 +619,11 @@
     </label>
   </div>
 
-  <!-- Results -->
   <div id="results-area"></div>
 
 </div>
 
 <script>
-// ===== CONFIG =====
 const AIRPORTS = [
   { code: 'GOT', name: 'Göteborg', default: true },
   { code: 'CPH', name: 'Köpenhamn', default: true },
@@ -623,62 +662,44 @@ const DESTINATIONS = [
   { code: 'SOF', name: 'Sofia', flag: '🇧🇬', hotel: 350 },
 ];
 
-let currentTab = 'compare';
+let selectedDuration = 2;
 let currentResults = [];
 let isSearching = false;
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
-  initAirportChips();
-  initDestDropdown();
-  initDestChips();
-  setDefaultDates();
+  buildAirportChips();
+  buildDestChips();
+  setDefaultDepDate();
+  updateReturnDate();
 });
 
-function initAirportChips() {
-  const grid = document.getElementById('compare-airports');
+function buildAirportChips() {
+  const grid = document.getElementById('airport-grid');
   AIRPORTS.forEach(ap => {
     const chip = document.createElement('div');
     chip.className = 'airport-chip' + (ap.default ? ' selected' : '');
     chip.dataset.code = ap.code;
-    chip.innerHTML = `
-      <input type="checkbox" ${ap.default ? 'checked' : ''}>
-      <span class="code">${ap.code}</span>
-      <span class="name">${ap.name}</span>
-    `;
-    chip.onclick = () => {
-      chip.classList.toggle('selected');
-      chip.querySelector('input').checked = chip.classList.contains('selected');
-    };
+    chip.innerHTML = '<span class="code">' + ap.code + '</span><span class="name">' + ap.name + '</span>';
+    chip.onclick = () => chip.classList.toggle('selected');
     grid.appendChild(chip);
   });
 }
 
-function initDestDropdown() {
-  const sel = document.getElementById('compare-dest');
-  DESTINATIONS.forEach(d => {
-    const opt = document.createElement('option');
-    opt.value = d.code;
-    opt.textContent = `${d.flag} ${d.name}`;
-    sel.appendChild(opt);
-  });
-}
-
-function initDestChips() {
-  const grid = document.getElementById('explore-dests');
-  // Default: select first 10
+function buildDestChips() {
+  const grid = document.getElementById('dest-grid');
   DESTINATIONS.forEach((d, i) => {
     const chip = document.createElement('div');
     chip.className = 'dest-chip' + (i < 10 ? ' selected' : '');
     chip.dataset.code = d.code;
-    chip.textContent = `${d.flag} ${d.name}`;
+    chip.textContent = d.flag + ' ' + d.name;
     chip.onclick = () => chip.classList.toggle('selected');
     grid.appendChild(chip);
   });
 }
 
 function toggleAllDests() {
-  const chips = document.querySelectorAll('#explore-dests .dest-chip');
+  const chips = document.querySelectorAll('#dest-grid .dest-chip');
   const anySelected = [...chips].some(c => c.classList.contains('selected'));
   chips.forEach(c => {
     if (anySelected) c.classList.remove('selected');
@@ -686,208 +707,225 @@ function toggleAllDests() {
   });
 }
 
-function setDefaultDates() {
-  // Default: next Saturday → Monday
-  const today = new Date();
-  const dayOfWeek = today.getDay();
-  const daysUntilSat = (6 - dayOfWeek + 7) % 7 || 7;
-  const nextSat = new Date(today);
-  nextSat.setDate(today.getDate() + daysUntilSat);
-  const nextMon = new Date(nextSat);
-  nextMon.setDate(nextSat.getDate() + 2);
-
-  const fmt = d => d.toISOString().split('T')[0];
-  document.getElementById('compare-dep').value = fmt(nextSat);
-  document.getElementById('compare-ret').value = fmt(nextMon);
-  document.getElementById('explore-dep').value = fmt(nextSat);
-  document.getElementById('explore-ret').value = fmt(nextMon);
-}
-
-// ===== TABS =====
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.tab === tab);
+// ===== DURATION =====
+function selectDuration(days) {
+  selectedDuration = days;
+  document.querySelectorAll('.dur-tab').forEach(t => {
+    t.classList.toggle('active', parseInt(t.dataset.days) === days);
   });
-  document.getElementById('panel-compare').classList.toggle('hidden', tab !== 'compare');
-  document.getElementById('panel-explore').classList.toggle('hidden', tab !== 'explore');
+  const isFixed = days > 0;
+  document.getElementById('fixed-date-section').classList.toggle('hidden', !isFixed);
+  document.getElementById('flex-date-section').classList.toggle('hidden', isFixed);
+  if (isFixed) {
+    updateReturnDate();
+  } else {
+    var dep = document.getElementById('dep-date').value;
+    document.getElementById('flex-dep').value = dep;
+    var retDate = new Date(dep);
+    retDate.setDate(retDate.getDate() + 3);
+    document.getElementById('flex-ret').value = fmt(retDate);
+  }
 }
 
-// ===== SEARCH: COMPARE =====
-async function doCompare() {
-  const dest = document.getElementById('compare-dest').value;
-  const dep = document.getElementById('compare-dep').value;
-  const ret = document.getElementById('compare-ret').value;
-
-  if (!dest) return alert('Välj en destination');
-  if (!dep || !ret) return alert('Välj datum');
-
-  const selected = [...document.querySelectorAll('#compare-airports .airport-chip.selected')]
-    .map(c => c.dataset.code);
-  if (selected.length === 0) return alert('Välj minst en flygplats');
-
-  await searchFlights({
-    origins: selected.join(','),
-    destination: dest,
-    outbound_date: dep,
-    return_date: ret
-  });
+// ===== DATES =====
+function setDefaultDepDate() {
+  var today = new Date();
+  var day = today.getDay();
+  var daysUntil = (5 - day + 7) % 7 || 7; // Next Friday
+  var dep = new Date(today);
+  dep.setDate(today.getDate() + daysUntil);
+  document.getElementById('dep-date').value = fmt(dep);
 }
 
-// ===== SEARCH: EXPLORE =====
-async function doExplore() {
-  const origin = document.getElementById('explore-origin').value;
-  const dep = document.getElementById('explore-dep').value;
-  const ret = document.getElementById('explore-ret').value;
-
-  if (!dep || !ret) return alert('Välj datum');
-
-  const selectedDests = [...document.querySelectorAll('#explore-dests .dest-chip.selected')]
-    .map(c => c.dataset.code);
-  if (selectedDests.length === 0) return alert('Välj minst en destination');
-
-  await searchFlights({
-    origins: origin,
-    destinations: selectedDests.join(','),
-    outbound_date: dep,
-    return_date: ret
-  });
+function updateReturnDate() {
+  if (selectedDuration === 0) return;
+  var depVal = document.getElementById('dep-date').value;
+  if (!depVal) return;
+  var dep = new Date(depVal);
+  var ret = new Date(dep);
+  ret.setDate(dep.getDate() + selectedDuration);
+  document.getElementById('trip-dep-label').textContent = formatDateShort(dep);
+  document.getElementById('trip-ret-label').textContent = formatDateShort(ret);
+  document.getElementById('trip-nights').textContent = '(' + selectedDuration + ' nätter)';
 }
 
-// ===== API CALL =====
-async function searchFlights(params) {
+function shiftDate(days) {
+  var input = document.getElementById('dep-date');
+  var d = new Date(input.value);
+  d.setDate(d.getDate() + days);
+  input.value = fmt(d);
+  updateReturnDate();
+}
+
+function fmt(d) { return d.toISOString().split('T')[0]; }
+
+function formatDateShort(d) {
+  var days = ['Sön','Mån','Tis','Ons','Tor','Fre','Lör'];
+  var months = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+  return days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
+}
+
+function getDates() {
+  if (selectedDuration === 0) {
+    return {
+      dep: document.getElementById('flex-dep').value,
+      ret: document.getElementById('flex-ret').value
+    };
+  }
+  var dep = document.getElementById('dep-date').value;
+  var depDate = new Date(dep);
+  var retDate = new Date(depDate);
+  retDate.setDate(depDate.getDate() + selectedDuration);
+  return { dep: dep, ret: fmt(retDate) };
+}
+
+// ===== SEARCH =====
+async function doSearch() {
   if (isSearching) return;
-  isSearching = true;
 
-  const btn = document.getElementById(currentTab === 'compare' ? 'btn-compare' : 'btn-explore');
+  var dates = getDates();
+  if (!dates.dep || !dates.ret) return alert('Välj datum');
+
+  var origins = [...document.querySelectorAll('#airport-grid .airport-chip.selected')]
+    .map(c => c.dataset.code);
+  if (origins.length === 0) return alert('Välj minst en flygplats');
+
+  var dests = [...document.querySelectorAll('#dest-grid .dest-chip.selected')]
+    .map(c => c.dataset.code);
+  if (dests.length === 0) return alert('Välj minst en destination');
+
+  isSearching = true;
+  var btn = document.getElementById('search-btn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Söker flyg...';
 
-  const area = document.getElementById('results-area');
-  area.innerHTML = `
-    <div class="loading-state">
-      <div class="big-spinner"></div>
-      <p>Söker billigaste flygningarna...</p>
-      <p style="font-size:0.8rem;margin-top:6px;color:var(--text-dim)">
-        Detta kan ta 10–30 sekunder beroende på antal sökningar
-      </p>
-    </div>
-  `;
+  var area = document.getElementById('results-area');
+  var totalSearches = origins.length * dests.length;
+  area.innerHTML =
+    '<div class="loading-state">' +
+    '<div class="big-spinner"></div>' +
+    '<p>Söker billigaste flygningarna...</p>' +
+    '<p style="font-size:0.8rem;margin-top:6px;color:var(--text-dim)">' +
+    totalSearches + ' kombinationer · Kan ta 15–60 sek</p></div>';
 
   try {
-    const qs = new URLSearchParams(params).toString();
-    const resp = await fetch(`/api/flights?${qs}`);
-    const data = await resp.json();
+    var allResults = [];
+    var completed = 0;
 
-    if (data.error) throw new Error(data.error);
+    for (var oi = 0; oi < origins.length; oi++) {
+      var origin = origins[oi];
+      var qs = 'origins=' + origin +
+        '&destinations=' + dests.join(',') +
+        '&outbound_date=' + dates.dep +
+        '&return_date=' + dates.ret;
 
-    currentResults = data.results || [];
+      var resp = await fetch('/api/flights?' + qs);
+      var data = await resp.json();
+
+      if (data.error) {
+        console.warn('Error for ' + origin + ':', data.error);
+        continue;
+      }
+      if (data.results) {
+        allResults = allResults.concat(data.results);
+      }
+      completed += dests.length;
+      var loadP = area.querySelector('p');
+      if (loadP) loadP.textContent = 'Söker... ' + completed + '/' + totalSearches + ' klara';
+    }
+
+    currentResults = allResults;
     document.getElementById('hotel-toggle-row').classList.remove('hidden');
     rerenderResults();
 
   } catch (err) {
-    area.innerHTML = `
-      <div class="error-state">
-        <p>⚠️ Sökningen misslyckades</p>
-        <p style="margin-top:6px;font-size:0.82rem;opacity:0.8">${err.message}</p>
-        <p style="margin-top:8px;font-size:0.78rem;color:var(--text-dim)">
-          Kontrollera att SERPAPI_KEY är konfigurerad i Vercel Environment Variables
-        </p>
-      </div>
-    `;
+    area.innerHTML =
+      '<div class="error-state">' +
+      '<p>⚠️ Sökningen misslyckades</p>' +
+      '<p style="margin-top:6px;font-size:0.82rem;opacity:0.8">' + err.message + '</p>' +
+      '<p style="margin-top:8px;font-size:0.78rem;color:var(--text-dim)">' +
+      'Kontrollera att SERPAPI_KEY är konfigurerad i Vercel</p></div>';
   } finally {
     isSearching = false;
     btn.disabled = false;
-    btn.textContent = currentTab === 'compare' ? 'Sök flyg' : 'Utforska destinationer';
+    btn.textContent = 'Sök flyg';
   }
 }
 
-// ===== RENDER RESULTS =====
+// ===== RENDER =====
 function rerenderResults() {
-  const area = document.getElementById('results-area');
-  const includeHotel = document.getElementById('hotel-toggle').checked;
-  const results = currentResults;
+  var area = document.getElementById('results-area');
+  var includeHotel = document.getElementById('hotel-toggle').checked;
+  var results = currentResults;
 
   if (results.length === 0) {
-    area.innerHTML = `
-      <div class="empty-state">
-        <div class="icon">🔍</div>
-        <p>Inga flyg hittades för dessa datum.</p>
-        <p style="font-size:0.82rem;color:var(--text-dim);margin-top:6px">Prova andra datum eller destinationer</p>
-      </div>
-    `;
+    area.innerHTML =
+      '<div class="empty-state"><div class="icon">🔍</div>' +
+      '<p>Inga flyg hittades för dessa datum.</p>' +
+      '<p style="font-size:0.82rem;color:var(--text-dim);margin-top:6px">Prova andra datum eller destinationer</p></div>';
     return;
   }
 
-  // Calculate nights from dates
-  const depField = document.getElementById(currentTab === 'compare' ? 'compare-dep' : 'explore-dep');
-  const retField = document.getElementById(currentTab === 'compare' ? 'compare-ret' : 'explore-ret');
-  const depDate = new Date(depField.value);
-  const retDate = new Date(retField.value);
-  const nights = Math.max(1, Math.round((retDate - depDate) / (1000 * 60 * 60 * 24)));
+  var dates = getDates();
+  var depDate = new Date(dates.dep);
+  var retDate = new Date(dates.ret);
+  var nights = Math.max(1, Math.round((retDate - depDate) / (1000 * 60 * 60 * 24)));
 
-  // Add hotel costs and sort
-  const enriched = results.map(r => {
-    const destInfo = DESTINATIONS.find(d => 
-      d.code === r.destination_code || 
-      r.destination_name?.toLowerCase().includes(d.name.toLowerCase())
-    );
-    const hotelPerNight = destInfo ? destInfo.hotel : 600;
-    const hotelTotal = hotelPerNight * nights;
-    const flag = destInfo ? destInfo.flag : '🌍';
-    const totalCost = includeHotel ? r.price + hotelTotal : r.price;
-    return { ...r, hotelPerNight, hotelTotal, flag, totalCost, nights };
+  var enriched = results.map(function(r) {
+    var destInfo = DESTINATIONS.find(function(d) {
+      return d.code === r.destination_code ||
+        (r.destination_name && r.destination_name.toLowerCase().indexOf(d.name.toLowerCase()) >= 0);
+    });
+    var hotelPerNight = destInfo ? destInfo.hotel : 600;
+    var hotelTotal = hotelPerNight * nights;
+    var flag = destInfo ? destInfo.flag : '🌍';
+    var totalCost = includeHotel ? r.price + hotelTotal : r.price;
+    return Object.assign({}, r, {
+      hotelPerNight: hotelPerNight,
+      hotelTotal: hotelTotal,
+      flag: flag,
+      totalCost: totalCost,
+      nights: nights
+    });
   });
 
-  enriched.sort((a, b) => a.totalCost - b.totalCost);
+  enriched.sort(function(a, b) { return a.totalCost - b.totalCost; });
 
-  let html = `
-    <div class="results-header">
-      <h2>Resultat</h2>
-      <span class="results-count">${enriched.length} flyg hittade</span>
-    </div>
-  `;
+  var html =
+    '<div class="results-header">' +
+    '<h2>Resultat</h2>' +
+    '<span class="results-count">' + enriched.length + ' flyg · ' + nights + ' nätter</span></div>';
 
-  enriched.forEach((r, i) => {
-    const isCheapest = i === 0;
-    const stopsText = r.stops === 0 ? 'Direkt' : `${r.stops} mellanlandning${r.stops > 1 ? 'ar' : ''}`;
-    const stopsClass = `stops-${Math.min(r.stops, 2)}`;
-    const durationH = Math.floor(r.total_duration / 60);
-    const durationM = r.total_duration % 60;
-    const destLabel = DESTINATIONS.find(d => d.code === r.destination_code)?.name 
-      || r.destination_name || r.destination_code;
+  enriched.forEach(function(r, i) {
+    var isCheapest = i === 0;
+    var stopsText = r.stops === 0 ? 'Direkt' : r.stops + ' mellanlandning' + (r.stops > 1 ? 'ar' : '');
+    var stopsClass = 'stops-' + Math.min(r.stops, 2);
+    var durationH = Math.floor(r.total_duration / 60);
+    var durationM = r.total_duration % 60;
+    var destMatch = DESTINATIONS.find(function(d) { return d.code === r.destination_code; });
+    var destLabel = destMatch ? destMatch.name : (r.destination_name || r.destination_code);
 
-    html += `
-      <div class="flight-card ${isCheapest ? 'cheapest' : ''}" style="animation-delay:${i * 0.04}s">
-        <div class="card-top">
-          <div>
-            <div class="card-dest">
-              <span class="flag">${r.flag}</span>${destLabel}
-            </div>
-            <div class="card-origin">
-              Från <span class="code">${r.origin}</span> · ${r.airlines?.join(', ') || 'Flygbolag ej angivet'}
-            </div>
-          </div>
-          <div class="card-price">
-            <div class="price-flight">${formatPrice(r.price)} kr</div>
-            ${includeHotel ? `
-              <div class="price-total">
-                + hotell ${formatPrice(r.hotelTotal)} kr = <b>${formatPrice(r.totalCost)} kr</b>
-              </div>
-            ` : ''}
-          </div>
-        </div>
-        <div class="card-details">
-          <div class="detail"><b class="${stopsClass}">${stopsText}</b></div>
-          ${r.total_duration ? `<div class="detail">${durationH}h ${durationM}m</div>` : ''}
-          ${r.departure_time ? `<div class="detail">Avg ${r.departure_time.split(' ').pop() || r.departure_time}</div>` : ''}
-          ${includeHotel ? `<div class="detail">🏨 ~${formatPrice(r.hotelPerNight)} kr/natt × ${r.nights}</div>` : ''}
-        </div>
-      </div>
-    `;
+    html +=
+      '<div class="flight-card ' + (isCheapest ? 'cheapest' : '') + '" style="animation-delay:' + (i * 0.04) + 's">' +
+      '<div class="card-top"><div>' +
+      '<div class="card-dest"><span class="flag">' + r.flag + '</span>' + destLabel + '</div>' +
+      '<div class="card-origin">Från <span class="code">' + r.origin + '</span> · ' +
+      (r.airlines ? r.airlines.join(', ') : '—') + '</div>' +
+      '</div><div class="card-price">' +
+      '<div class="price-flight">' + formatPrice(r.price) + ' kr</div>' +
+      (includeHotel ?
+        '<div class="price-total">+ hotell ' + formatPrice(r.hotelTotal) + ' kr = <b>' +
+        formatPrice(r.totalCost) + ' kr</b></div>' : '') +
+      '</div></div>' +
+      '<div class="card-details">' +
+      '<div class="detail"><b class="' + stopsClass + '">' + stopsText + '</b></div>' +
+      (r.total_duration ? '<div class="detail">' + durationH + 'h ' + durationM + 'm</div>' : '') +
+      (r.departure_time ? '<div class="detail">Avg ' + (r.departure_time.split(' ').pop() || r.departure_time) + '</div>' : '') +
+      (includeHotel ? '<div class="detail">🏨 ~' + formatPrice(r.hotelPerNight) + ' kr/natt × ' + r.nights + '</div>' : '') +
+      '</div></div>';
   });
 
-  html += `<p class="api-note">Priser från Google Flights via SerpAPI · Hotellpriser är uppskattningar för budgethotell</p>`;
+  html += '<p class="api-note">Priser från Google Flights via SerpAPI · Hotellpriser är uppskattningar för budgethotell</p>';
   area.innerHTML = html;
 }
 
